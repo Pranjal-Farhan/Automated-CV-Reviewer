@@ -1,0 +1,21 @@
+# Virtual environments
+venv/
+.venv/
+__pycache__/
+*.pyc
+
+# Output files (generated, not source code)
+output/*.json
+output/*.txt
+
+# IDE
+.vscode/
+.idea/
+*.swp
+
+# OS
+Thumbs.db
+.DS_Store
+
+# Docker
+*.log
