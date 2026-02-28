@@ -5,25 +5,25 @@ version: "3.8"
 # ─────────────────────────────────────────────────────────
 
 services:
-  # ─── YOUR SERVICE ─────────────────────────────────────
+  # ─── PARSER SERVICE (Teammate's) ──────────────────────
   parser:
     build:
       context: ./parser
       dockerfile: Dockerfile
     volumes:
-      # Mount local input/ → container's /app/input/ (read CVs)
       - ./input:/app/input:ro
-      # Mount local output/ → container's /app/output/ (write JSONs)
       - ./output:/app/output
-    # Default: parse all PDFs in input with all parsers
-    # Override the filename via command line (shown below)
 
-  # ─── TEAMMATE'S SERVICE (placeholder) ─────────────────
-  # analyzer:
-  #   build:
-  #     context: ./analyzer
-  #     dockerfile: Dockerfile
-  #   volumes:
-  #     - ./output:/app/input:ro    ← reads YOUR output as ITS input
-  #   depends_on:
-  #     - parser                     ← ensures parser runs first
+  # ─── ANALYZER SERVICE (Yours) ─────────────────────────
+  analyzer:
+    build:
+      context: ./analyzer
+      dockerfile: Dockerfile
+    volumes:
+      - ./output:/app/output:ro     # Reads parser's output
+    env_file:
+      - ./analyzer/.env             # Your Gemini API key
+    depends_on:
+      - parser                      # Ensures parser runs first
+    stdin_open: true
+    tty: true

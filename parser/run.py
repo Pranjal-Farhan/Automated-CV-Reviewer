@@ -43,13 +43,17 @@ def parse_with(parser_name: str, pdf_path: Path, extractor, formatter):
         print(formatter.format(cv_data))
 
         # Save
-        stem = pdf_path.stem  # filename without extension
-        out_path = Path("/app/output") / f"{stem}_{parser_name}"
+        stem = pdf_path.stem
+        out_path = Path("../output") / f"{stem}_{parser_name}"
         formatter.to_file(cv_data, str(out_path))
+
+        raw_text_path = Path("../output") / f"{stem}_{parser_name}_raw.txt"
+        with open(raw_text_path, "w", encoding="utf-8") as f:
+            f.write(raw_text)
+        print(f"  ✅ Raw text saved → {raw_text_path}")
 
     except Exception as exc:
         print(f"  ❌ Error with {parser_name}: {exc}\n")
-
 
 def main():
     arg_parser = argparse.ArgumentParser(

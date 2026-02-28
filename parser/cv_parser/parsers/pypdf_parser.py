@@ -1,9 +1,3 @@
-#!/usr/bin/env python
-# coding: utf-8
-
-# In[ ]:
-
-
 """Concrete parser: uses the *pypdf* library."""
 
 from pathlib import Path
