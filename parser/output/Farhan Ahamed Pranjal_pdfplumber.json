@@ -1,0 +1,44 @@
+{
+  "full_name": "Farhan Ahamed",
+  "phone_number": "+880 1324530290",
+  "email": "pranjalfarhan@gmail.com",
+  "location": "South Banasree, Dhaka\noptimal outcomes in training cycles",
+  "education": [
+    {
+      "degree": "",
+      "institution": "Rajshahi University of Engineering and Present Visual Design Technolog UI/UX",
+      "year": "2022"
+    },
+    {
+      "degree": "BSc. in Computer Science and Engineering",
+      "institution": "",
+      "year": ""
+    },
+    {
+      "degree": "Bachelor Degree from RUET under the Storyboards",
+      "institution": "I am a currently finishing my department of CSE. I have secured SGPA 3.84 and 3.88 in my last Process Flows two semesters respectively.",
+      "year": ""
+    }
+  ],
+  "skills": [
+    "# Critical thinking and problem solving",
+    "Java",
+    "# Team collaboration",
+    "ARM Assembly",
+    "# Software development and debugging",
+    "Python",
+    "# Embedded systems and object",
+    "oriented programming",
+    "SQL"
+  ],
+  "experience": [
+    {
+      "role": "Outlier-ScaleAI",
+      "company": "",
+      "duration": "2023- 2025",
+      "summary": "English # Curated high-quality training data for AI models to enhance performance. Bengali # Reviewed and annotated datasets for accuracy and relevance, ensuring high standards. Hindi (Conversation..."
+    }
+  ],
+  "projects": [],
+  "parser_used": "pdfplumber"
+}
