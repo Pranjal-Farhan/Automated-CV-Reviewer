@@ -1,21 +1,67 @@
+# ===========================
 # Virtual environments
+# ===========================
 venv/
 .venv/
 __pycache__/
 *.pyc
+*.pyo
 
-# Output files (generated, not source code)
+# ===========================
+# Environment variables (IMPORTANT — contains API keys!)
+# ===========================
+.env
+*.env
+!.env.example
+
+# ===========================
+# Output files (results now go to MongoDB)
+# ===========================
 output/*.json
 output/*.txt
+output/
 
+# ===========================
 # IDE
+# ===========================
 .vscode/
 .idea/
 *.swp
+*.swo
 
+# ===========================
 # OS
+# ===========================
 Thumbs.db
 .DS_Store
 
+# ===========================
 # Docker
+# ===========================
 *.log
+docker-compose.override.yml
+
+# ===========================
+# MongoDB local data (if running without Docker)
+# ===========================
+mongo_data/
+data/
+
+# ===========================
+# Python
+# ===========================
+*.egg-info/
+dist/
+build/
+*.egg
+
+# ===========================
+# Temp files (from CV processing)
+# ===========================
+*.tmp
+tmp/
+
+# ===========================
+# Jupyter Notebooks (checkpoints from parser/)
+# ===========================
+.ipynb_checkpoints/
