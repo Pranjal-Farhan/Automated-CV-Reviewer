@@ -18,10 +18,10 @@ class CVService:
         return str(uuid.uuid4())
 
     @staticmethod
-    async def create_job(filename: str) -> str:
-        job_id = CVService.generate_job_id()
-        await CVRepository.create_job(job_id, filename)
-        return job_id
+    async def create_job(filename: str, user_id: str = None) -> str:
+         job_id = str(uuid.uuid4())
+         await CVRepository.create_job(job_id, filename, user_id)
+         return job_id
 
     @staticmethod
     async def process_cv(job_id: str, file_content: bytes, filename: str):
