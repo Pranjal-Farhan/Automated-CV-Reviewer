@@ -1,6 +1,4 @@
 from fastapi import HTTPException, status
-from google.oauth2 import id_token
-from google.auth.transport import requests as google_requests
 
 from app.config.auth import (
     hash_password,
@@ -64,20 +62,60 @@ async def login(data: UserLogin) -> TokenResponse:
 
 
 async def google_auth(credential: str) -> TokenResponse:
+    """
+    Handle Google OAuth.
+    The frontend sends an access_token from Google's OAuth popup.
+    We try two methods:
+      1. Use it as an access_token to fetch user info from Google API
+      2. Fall back to verifying it as an id_token
+    """
+    import requests as req
+
+    user_info = None
+
+    # ── Method 1: Treat credential as access_token ──
     try:
-        idinfo = id_token.verify_oauth2_token(
-            credential, google_requests.Request(), GOOGLE_CLIENT_ID
+        google_resp = req.get(
+            "https://www.googleapis.com/oauth2/v3/userinfo",
+            headers={"Authorization": f"Bearer {credential}"},
+            timeout=10,
         )
-    except ValueError:
+        if google_resp.status_code == 200:
+            data = google_resp.json()
+            if data.get("sub"):
+                user_info = data
+    except Exception:
+        pass
+
+    # ── Method 2: Treat credential as id_token ──
+    if not user_info:
+        try:
+            from google.oauth2 import id_token
+            from google.auth.transport import requests as google_requests
+
+            user_info = id_token.verify_oauth2_token(
+                credential, google_requests.Request(), GOOGLE_CLIENT_ID
+            )
+        except Exception:
+            pass
+
+    # ── If both methods failed ──
+    if not user_info or not user_info.get("sub"):
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Invalid Google token",
         )
 
-    google_id = idinfo["sub"]
-    email = idinfo["email"]
-    name = idinfo.get("name", email.split("@")[0])
-    avatar = idinfo.get("picture")
+    google_id = user_info["sub"]
+    email = user_info.get("email", "")
+    name = user_info.get("name", email.split("@")[0])
+    avatar = user_info.get("picture")
+
+    if not email:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Google account has no email",
+        )
 
     # Check if user exists by google_id or email
     user = await user_repository.find_by_google_id(google_id)
@@ -85,7 +123,7 @@ async def google_auth(credential: str) -> TokenResponse:
         user = await user_repository.find_by_email(email)
 
     if user:
-        # Update google info if needed
+        # Update google info
         await user_repository.update_user(
             str(user["_id"]),
             {"google_id": google_id, "avatar": avatar or user.get("avatar")},
