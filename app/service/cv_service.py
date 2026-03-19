@@ -1,5 +1,6 @@
 import os
 import uuid
+import json
 import asyncio
 import tempfile
 from pathlib import Path
@@ -40,7 +41,13 @@ class CVService:
                 await CVRepository.save_error(job_id, analysis_result)
                 return
 
-            await CVRepository.save_result(job_id, raw_text, analysis_result)
+            try:
+                analysis_dict = json.loads(analysis_result) if isinstance(analysis_result, str) else analysis_result
+            except json.JSONDecodeError:
+                await CVRepository.save_error(job_id, "AI returned invalid JSON")
+                return
+
+            await CVRepository.save_result(job_id, raw_text, analysis_dict)
 
         except Exception as e:
             await CVRepository.save_error(job_id, f"Processing error: {str(e)}")

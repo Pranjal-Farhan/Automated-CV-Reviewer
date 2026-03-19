@@ -2,7 +2,7 @@ from pydantic import BaseModel
 from typing import Optional
 from datetime import datetime
 from enum import Enum
-
+from typing import Any
 
 class JobStatus(str, Enum):
     PENDING = "pending"
@@ -25,7 +25,7 @@ class ResultResponse(BaseModel):
     job_id: str
     status: str
     filename: Optional[str] = None
-    analysis_result: Optional[str] = None
+    analysis_result: Any = None
     created_at: Optional[datetime] = None
     completed_at: Optional[datetime] = None
     error: Optional[str] = None
@@ -40,7 +40,7 @@ class CVJobDocument(BaseModel):
     filename: str
     status: JobStatus = JobStatus.PENDING
     raw_text: Optional[str] = None
-    analysis_result: Optional[str] = None
+    analysis_result: Any = None 
     created_at: datetime = None
     completed_at: Optional[datetime] = None
     error: Optional[str] = None
